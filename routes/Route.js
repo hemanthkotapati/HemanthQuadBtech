@@ -11,8 +11,10 @@ const getDetails = async (baseUnit) => {
         const response = await axios.get('https://api.wazirx.com/api/v2/tickers')
         const res_data = await response.data
         const result = Object.values(res_data).slice(0,10)
-
+        
         const cryptoDataArray = result.map((data) => new CryptoData(data))
+
+        await CryptoData.insertMany(cryptoDataArray)
 
         var storedData = await CryptoData.find({"base_unit" : baseUnit}).sort({_id:-1}).limit(10)
         
